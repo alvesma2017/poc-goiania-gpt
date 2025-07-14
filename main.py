@@ -37,7 +37,7 @@ resposta = None
 prompt_enviado = None
 
 if enviar and prompt_text.strip():
-    with st.spinner("Consultando OpenAI..."):
+    with st.spinner("Consultando Eugenia..."):
         resposta = enviar_prompt_livre(prompt_text.strip())
         prompt_enviado = prompt_text.strip()
 elif quebra_termo:
@@ -46,7 +46,7 @@ elif quebra_termo:
         "com prazo de 12 meses, valor global de R$ 300.000,00, pagamento em até 30 dias, garantias legais, "
         "aplicação das penalidades previstas na Lei nº 14.133/2021, e fiscalização pelo Departamento de TI."
     )
-    with st.spinner("Consultando OpenAI..."):
+    with st.spinner("Consultando Eugenia..."):
         resposta = enviar_prompt_livre(prompt_padrao)
         prompt_enviado = prompt_padrao
 elif quebra_minuta:
@@ -55,7 +55,7 @@ elif quebra_minuta:
         "com prazo de 12 meses, valor global de R$ 300.000,00, pagamento em até 30 dias, garantias legais, "
         "aplicação das penalidades previstas na Lei nº 14.133/2021, e fiscalização pelo Departamentos competentes."
     )
-    with st.spinner("Consultando OpenAI..."):
+    with st.spinner("Consultando Eugenia..."):
         resposta = enviar_prompt_livre(prompt_padrao)
         prompt_enviado = prompt_padrao
 elif quebra_edital:
