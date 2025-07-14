@@ -15,24 +15,31 @@ with st.sidebar:
         """,
         unsafe_allow_html=True,
     )
-st.title("Prompt Livre")
+st.title("Gerar Documentos")
 
-st.markdown("Use o campo abaixo para digitar um prompt livre ou clique em um dos quebra-gelos abaixo:")
+st.markdown("Use o campo abaixo para digitar um prompt ou clique em um dos quebra-gelos abaixo:")
+
+# Inicia histórico
+if "historico" not in st.session_state:
+    st.session_state["historico"] = []
 
 # Campo para prompt livre
 prompt_text = st.text_area("Digite seu prompt", height=120)
 
-col1, col2, col3, col4 = st.columns([1.5, 1.5, 1.5, 2])
+col1, col2, col3, col4, col5 = st.columns([1.2, 1.5, 1.5, 1.5, 1.5])
 enviar = col1.button("Enviar")
-quebra_termo = col2.button("Gerar Termo de referência")
-quebra_minuta = col3.button("Gerar Minuta de Contrato")
-quebra_edital = col4.button("Gerar Edital de Licitação")
+limpar = col2.button("Limpar histórico")
+quebra_termo = col3.button("Gerar Termo de referência")
+quebra_minuta = col4.button("Gerar Minuta de Contrato")
+quebra_edital = col5.button("Gerar Edital de Licitação")
 
 resposta = None
+prompt_enviado = None
 
 if enviar and prompt_text.strip():
     with st.spinner("Consultando OpenAI..."):
         resposta = enviar_prompt_livre(prompt_text.strip())
+        prompt_enviado = prompt_text.strip()
 elif quebra_termo:
     prompt_padrao = (
         "Gerar termo de referencia para aquisição de equipamentos de informática pela Prefeitura de Goiânia, "
@@ -41,6 +48,7 @@ elif quebra_termo:
     )
     with st.spinner("Consultando OpenAI..."):
         resposta = enviar_prompt_livre(prompt_padrao)
+        prompt_enviado = prompt_padrao
 elif quebra_minuta:
     prompt_padrao = (
         "Gerar minuta de contrato detalhada para aquisição de equipamentos pela Prefeitura de Goiânia, "
@@ -49,6 +57,7 @@ elif quebra_minuta:
     )
     with st.spinner("Consultando OpenAI..."):
         resposta = enviar_prompt_livre(prompt_padrao)
+        prompt_enviado = prompt_padrao
 elif quebra_edital:
     prompt_padrao = (
         "Gerar edital de licitação para aquisição de equipamentos de informática pela Prefeitura de Goiânia, "
@@ -57,8 +66,27 @@ elif quebra_edital:
     )
     with st.spinner("Consultando OpenAI..."):
         resposta = enviar_prompt_livre(prompt_padrao)
+        prompt_enviado = prompt_padrao
 
+# Adiciona ao histórico
 if resposta:
+    st.session_state["historico"].append({
+        "prompt": prompt_enviado,
+        "resposta": resposta,
+    })
+
+# Limpa histórico
+if limpar:
+    st.session_state["historico"] = []
+    st.experimental_rerun()
+
+# Exibe histórico
+if st.session_state["historico"]:
     st.markdown("---")
-    st.markdown("#### Resposta:")
-    st.markdown(resposta, unsafe_allow_html=True)
+    st.markdown("### Histórico de respostas")
+    for item in reversed(st.session_state["historico"]):
+        if item.get("prompt"):
+            st.markdown(f"**Prompt:** `{item['prompt']}`")
+        st.markdown("**Resposta:**")
+        st.markdown(item["resposta"], unsafe_allow_html=True)
+        st.markdown("---")
