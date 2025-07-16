@@ -3,7 +3,7 @@ from openai_promptlivre import enviar_prompt_livre
 
 st.set_page_config(layout="wide", page_title="Prompt Livre - Agente Jurídico", initial_sidebar_state="expanded")
 with st.sidebar:
-    st.image("logo_goi.png", width=220)
+    st.image("logo_goi2.png", width=220)
     st.markdown(
         """
         <div style='background-color:#111124;padding:20px;border-radius:10px; text-align:center; margin-top: 10px;'>
